@@ -19,7 +19,14 @@ class server_logic
     public static function caller()
     {
         self::$module_data = self::decode($_POST['input']);
-        self::$module_data = module(self::$module_data);
+        $inc = module::include_module(self::$module_data['call']);
+        if(!empty($inc) && count($inc) >= 1 && $inc != false)
+        {
+            foreach ($inc as $file)
+            { require_once(ROOT_PATH . $file); }
+            self::$module_data = call_user_func(module::module_call_function(self::$module_data['call'],self::$module_data));
+        }
+
         echo self::encode(self::$module_data);
     }
 

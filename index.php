@@ -30,35 +30,9 @@ define('IN_SYS', true);
 ## Include Core ##
 require(ROOT_PATH . 'inc/common.php');
 
-## End PageTimer ##
-$time_end = getmicrotime();
-$time = $time_end - $time_start;
-
 ///////////////////// MAIN //////////////////////////////
 
-server_logic::set_api_cryptkey('test1234');
-
-function module($data='')
-{
-    die(server_logic::get_api_ident());
-    if(server_logic::get_api_ident())
-    switch ($data['call'])
-    {
-        case 'news':
-            return array('sdffdsfds' => 'fgdgffg');
-        break;
-
-        default:
-        break;
-    }
-
-
-    print_r($data);
-    die();
-
-    return array('fdsfsdsdffds' => 'fgdgffg');
-}
-
+module::init();
 server_logic::caller();
 
 ## End Buffer *Flush ##

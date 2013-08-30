@@ -259,7 +259,7 @@ class xml
     public static function openXMLfile($XMLTag,$XMLFile,$oneModule=false)
     {
         if(empty($XMLTag) || empty($XMLFile)) return false;
-        if(file_exists(basePath . '/' . $XMLFile) || !$oneModule)
+        if(file_exists(ROOT_PATH . $XMLFile) || !$oneModule)
         {
             if(!array_key_exists($XMLTag,self::$xmlobj))
             {
@@ -267,11 +267,11 @@ class xml
 
                 if(!$oneModule)
                 {
-                    if(!file_exists(basePath . '/' . $XMLFile))
-                        file_put_contents(basePath . '/' . $XMLFile, '<?xml version="1.0"?><'.$XMLTag.'></'.$XMLTag.'>');
+                    if(!file_exists(ROOT_PATH . $XMLFile))
+                        file_put_contents(ROOT_PATH . $XMLFile, '<?xml version="1.0"?><'.$XMLTag.'></'.$XMLTag.'>');
                 }
 
-                self::$xmlobj[$XMLTag]['objekt'] = simplexml_load_file(basePath . '/' . $XMLFile);
+                self::$xmlobj[$XMLTag]['objekt'] = simplexml_load_file(ROOT_PATH . $XMLFile);
 
                 if(self::$xmlobj[$XMLTag]['objekt'] != false)
                     return true;
@@ -372,7 +372,7 @@ class xml
             return false;
 
         $xmlFileValue = self::$xmlobj[$XMLTag]['objekt']->asXML();
-        file_put_contents(basePath . '/' . self::$xmlobj[$XMLTag]['xmlFile'], $xmlFileValue);
+        file_put_contents(ROOT_PATH . self::$xmlobj[$XMLTag]['xmlFile'], $xmlFileValue);
         return true;
     }
 
