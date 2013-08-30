@@ -58,7 +58,7 @@ final class server_api_encode
 
     public static function server_encode($input_array=array())
     {
-        if(empty($input_array) || !is_array($input_array)) return false;
+        if(empty($input_array)) return false;
         self::$input_array_in = $input_array;
         if(!self::encode_base()) return false;
         if(!self::encode_crypt()) return false;
@@ -76,7 +76,7 @@ final class server_api_encode
     private static function encode_crypt()
     {
         if(empty(self::$json_stream)) return false;
-        self::$options['encode_crypt'] ? self::encryptData() : self::$json_stream;
+        self::$options['encode_crypt'] ? self::encryptData() : (self::$mcrypt_string = self::$json_stream);
         return (empty(self::$mcrypt_string) || !self::$mcrypt_string ? false : true);
     }
 

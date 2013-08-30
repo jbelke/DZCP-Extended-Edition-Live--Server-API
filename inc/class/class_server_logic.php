@@ -12,7 +12,7 @@ class server_logic
     private static $data_stream = null; //Hex etc.
     private static $data = array();
     private static $options = array();
-    private static $cryptkey = '12345';
+    private static $cryptkey = '';
     private static $module_data = array();
     private static $ident = '';
 
@@ -29,6 +29,9 @@ class server_logic
     public static function get_api_ident()
     { return self::$ident; }
 
+    public static function get_api_options($key='decode_crypt')
+    { return self::$options[$key]; }
+
     public static final function encode($data='')
     {
         self::$data = $data;
@@ -36,9 +39,11 @@ class server_logic
 
         if(!empty(self::$cryptkey))
             server_api_encode::server_encode_cryptkey(self::$cryptkey);
+        else
+            server_api_encode::set_options('encode_crypt',false);
 
-        self::$options['encode_hex'] = true;
-        self::$options['encode_gzip'] = true;
+        self::$options['encode_hex'] = self::$options['decode_hex'];
+        self::$options['encode_gzip'] = self::$options['decode_gzip'];
         self::$options['encode_crypt'] = !empty(self::$cryptkey) ? true : false;
         self::$options['encode_base'] = is_array(self::$data) ? true : false;
         self::$options['file_stream'] = false;
@@ -85,7 +90,7 @@ class server_logic
         (self::$options['encode_crypt'] ? '1' : '0').'|'. // Crypt
         (self::$options['encode_base'] ? '1' : '0').'|'. // JSON
         (self::$options['file_stream'] ? '1' : '0').'|'. // File Stream
-        (generatetime() - $time_start).'|'. // Prozesstime
+        (getmicrotime() - $time_start).'|'. // Prozesstime
         self::$ident.'|'. // Return Ident
         self::$data_stream; // Data
         self::$data_stream = null;
@@ -95,7 +100,6 @@ class server_logic
 
     private static final function read_control()
     {
-        die(self::$stream);
         $data = explode('|', self::$stream, 8);
         self::$options['decode_hex'] = convert::IntToBool($data[0]);
         self::$options['decode_gzip'] = convert::IntToBool($data[1]);

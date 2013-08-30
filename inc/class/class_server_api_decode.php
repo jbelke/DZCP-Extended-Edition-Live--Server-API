@@ -88,7 +88,7 @@ final class server_api_decode
     private static function decode_crypt()
     {
         if(empty(self::$mcrypt_string)) return false;
-        self::$options['decode_crypt'] ? self::decryptData() : self::$mcrypt_string;
+        self::$options['decode_crypt'] ? self::decryptData() : (self::$json_stream = self::$mcrypt_string);
         return (empty(self::$json_stream) ? false : true);
     }
 
