@@ -34,6 +34,8 @@ final class server_api_encode
         self::$options['encode_gzip'] = true;
         self::$options['encode_crypt'] = true;
         self::$options['encode_base'] = true;
+
+        return true;
     }
 
     public static function set_options($key="",$var='')
@@ -74,7 +76,7 @@ final class server_api_encode
     private static function encode_crypt()
     {
         if(empty(self::$json_stream)) return false;
-        self::$mcrypt_string = self::$options['encode_crypt'] ? self::encryptData() : self::$json_stream;
+        self::$options['encode_crypt'] ? self::encryptData() : self::$json_stream;
         return (empty(self::$mcrypt_string) || !self::$mcrypt_string ? false : true);
     }
 

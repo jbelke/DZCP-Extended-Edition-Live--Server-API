@@ -37,6 +37,8 @@ final class server_api_decode
         self::$options['decode_gzip'] = true;
         self::$options['decode_crypt'] = true;
         self::$options['decode_base'] = true;
+
+        return true;
     }
 
     public static function server_decode_cryptkey($key="")
@@ -59,7 +61,7 @@ final class server_api_decode
 
     public static function server_decode($hex_stream=null)
     {
-        self::$hex_stream_in = $hex_stream;
+        self::$hex_stream_in = $hex_stream; unset($hex_stream);
         if(empty(self::$hex_stream_in)) return false;
 
         if(!self::decode_hex()) return false;
@@ -86,7 +88,7 @@ final class server_api_decode
     private static function decode_crypt()
     {
         if(empty(self::$mcrypt_string)) return false;
-        self::$json_stream = self::$options['decode_crypt'] ? self::decryptData() : self::$mcrypt_string;
+        self::$options['decode_crypt'] ? self::decryptData() : self::$mcrypt_string;
         return (empty(self::$json_stream) ? false : true);
     }
 
