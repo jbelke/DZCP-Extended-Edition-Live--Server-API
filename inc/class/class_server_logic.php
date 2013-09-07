@@ -24,7 +24,7 @@ class server_logic
         {
             foreach ($inc as $file)
             { require_once(ROOT_PATH . $file); }
-            self::$module_data = call_user_func(module::module_call_function(self::$module_data['call'],self::$module_data));
+            self::$module_data = call_user_func(module::module_call_function(self::$module_data['call']),self::$module_data);
         }
 
         echo self::encode(self::$module_data);

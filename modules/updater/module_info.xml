@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<info>
+	<module_on_call>updater</module_on_call>
+	<module_call_function>test2</module_call_function>
+</info>

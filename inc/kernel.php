@@ -12,7 +12,7 @@ define('runtime_buffer', true);
 
 class kernel
 {
-    private static $passwordComponents = array("ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz","0123456789","#$@!"); //generatePW() Components
+    private static $passwordComponents = array("abcdefghijklmnopqrstuvwxyz","0123456789"); //generatePW() Components
     private static $xmlobj = array(array()); //XML
 
     /**
@@ -102,21 +102,29 @@ class kernel
             return false;
     }
 
-    /**
-     * Wandelt einen Json-String in ein Array um.
-     *
-     * @return array
-     */
-    public static function string_to_array($str='')
-    { return json_decode($str, true); }
+	/**
+	 * Wandelt einen Json-String in ein Array um.
+	 * Optional‎: Kann komprimierten Json-String decodieren und in ein Array umwandeln.
+	 *
+	 * @return array
+	 */
+	function string_to_array($str='',$compress=false)
+	{
+	    if($compress) $str = gzuncompress(hex2bin($str));
+	    return json_decode($str, true);
+	}
 
-    /**
-     * Wandelt einen Array in einen Json-String um.
-     *
-     * @return String
-     */
-    public static function array_to_string($arr=array())
-    { return json_encode($arr,JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP); }
+	/**
+	 * Wandelt einen Array in einen Json-String um.
+	 * Optional‎: Der Json-String kann komprimiert werden und wird als Hex zurückgegeben.
+	 *
+	 * @return String
+	 */
+	function array_to_string($arr=array(),$compress=false)
+	{
+	    $json = json_encode($arr,JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP);
+	    return $compress ? bin2hex(gzcompress($json)) : $json;
+	}
 
     /**
      * Funktion um eine Variable prüfung in einem Array durchzuführen
@@ -428,6 +436,9 @@ class xml
     { return ($value == 'true' ? true : false); }
 }
 
+#############################################
+############### TypeConverter ###############
+#############################################
 class convert
 {
     public static final function ToString($input)
@@ -447,6 +458,12 @@ class convert
 
     public static final function UTF8_Reverse($input)
     { return utf8_decode($input); }
+
+    public static final function ToHTML($input)
+    { return htmlentities($input, ENT_COMPAT, _charset); }
+
+    public static final function objectToArray($d)
+    { return json_decode(json_encode($d, JSON_FORCE_OBJECT), true); }
 }
 
 class string
