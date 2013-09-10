@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<info>
+	<module_on_call>handshake</module_on_call>
+	<module_call_function>send_handshake</module_call_function>
+</info>
